@@ -21,9 +21,13 @@ export const fetchNotes = async (
   search: string,
   page: number
 ): Promise<FetchNotesResponse> => {
-  const response = await api.get<FetchNotesResponse>(
-    `/notes?search=${search}&page=${page}&perPage=12`
-  );
+  const response = await api.get<FetchNotesResponse>(`/notes`, {
+    params: {
+      search: search.trim() || undefined,
+      page,
+      perPage: 12,
+    },
+  });
   return response.data;
 };
 
@@ -34,5 +38,10 @@ export const createNote = async (note: NewNote): Promise<Note> => {
 
 export const deleteNote = async (id: string): Promise<Note> => {
   const response = await api.delete<Note>(`/notes/${id}`);
+  return response.data;
+};
+
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const response = await api.get<Note>(`/notes/${id}`);
   return response.data;
 };
